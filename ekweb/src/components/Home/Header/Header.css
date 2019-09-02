@@ -1,0 +1,35 @@
+.main_div{
+
+   background-color: #0091ff;
+    margin:0 auto;
+
+}
+.bg-dark{
+    background-color: #0091ff !important;
+}
+
+ .navbar-brand{
+   margin-left: 150px;
+   margin-right:30rem !important;
+}
+.nav-link{
+    padding-left:60px !important;
+}
+ .nav_account{
+    margin-right:30px;
+    color:white;
+    font-weight: bold;
+}
+.join_btn{
+    width: 131px;
+    height: 36px;
+   background-color: red;
+     border-radius:20px;
+     text-align: center;
+     padding:0px;
+     margin-right:70px;
+}
+
+
+   
+ 
