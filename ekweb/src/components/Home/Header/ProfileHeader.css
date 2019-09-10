@@ -1,0 +1,24 @@
+
+    #Profile_nav.bg-dark {
+        background-color: #00355d !important;
+        
+    }
+    #img1{
+        position:absolute;
+        top:80px;
+        left:70px;
+    }
+    #Profile_nav{
+        height:148px;
+        display:flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+    .navbar-nav{
+        padding-left:350px;
+        margin-top:-70px;
+    }
+    .navbar-dark .navbar-nav .nav-link {
+        color:white;
+        font-size:12px;
+    }

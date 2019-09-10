@@ -1,8 +1,6 @@
 import React,{Component} from 'react';
-import {Link} from 'react-router-dom';
 import './Header.css';
-import {Navbar,NavDropdown,Nav,Button,ButtonToolbar} from 'react-bootstrap';
-import logo from './logo.jpg'; 
+import {Link} from 'react-router-dom';
 
 
 
@@ -10,43 +8,37 @@ class Header extends Component{
  render(){
   return(
     <>
-  <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-  <Navbar.Brand href="/"> <img alt="logo" src={logo} width="40" height="30" /></Navbar.Brand>
-  <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-  <Navbar.Collapse id="responsive-navbar-nav">
-    <Nav className="mr-auto">
-      <Nav.Link href="/">Home</Nav.Link>
-    
-      <NavDropdown title="About us" id="collasible-nav-dropdown">
-        <NavDropdown.Item href="Aboutus">Aboutus </NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-      </NavDropdown>
-      <NavDropdown title="Partners" id="collasible-nav-dropdown">
-        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-      </NavDropdown>
-      <Link to="FAQs" class="nav-link">FAQs</Link>
-      <Link to="Contactus" class="nav-link">Contact us</Link>
-    </Nav>
-    <Nav>
-    <Link to="Signup" class="nav_account">Signup</Link>
-     <Link to="SignIn" class="nav_account">SignIn</Link>
-    </Nav>
-    <ButtonToolbar>
-    <Button variant="primary" className="join_btn" size="lg">
-      Join Now
-    </Button>
-</ButtonToolbar>
-  </Navbar.Collapse>
-</Navbar>
+  
+  <nav className="animenu" role="navigation" aria-label="Menu">
+  <button className="animenu__toggle">
+    <span className="animenu__toggle__bar"></span>
+    <span className="animenu__toggle__bar"></span>
+    <span className="animenu__toggle__bar"></span>
+  </button>
 
- 
+  <ul className="animenu__nav">
+    <li><Link to="/">Home</Link></li>
+    <li><Link to="/Aboutus">Aboutus</Link></li>
+    <li>
+      <Link to="#" className="animenu__nav__hasDropdown" aria-haspopup="true">Events</Link>
+      <ul className="animenu__nav__dropdown" aria-label="submenu">
+        <li><Link to="EventList" role="menuitem">EventList</Link></li>
+        <li><Link to="Eventprofile" role="menuitem">EventProfile</Link></li>
+      </ul>
+    </li>
+    <li>
+      <Link className="animenu__nav__hasDropdown" aria-haspopup="true">Partners</Link>
+      <ul className="animenu__nav__dropdown" aria-label="submenu">
+        <li><Link to="#" role="menuitem">Sub Item 1</Link></li>
+        <li><Link to="#" role="menuitem">Sub Item 2</Link></li>
+        <li><Link to="#" role="menuitem">Sub Item 3</Link></li>
+      </ul>
+    </li>
+    <li><Link to="FAQs">FAQs</Link></li>
+    <li><Link to="Contactus">Contact us</Link></li>
+  </ul>
+</nav>
+
 </>
   );
 }

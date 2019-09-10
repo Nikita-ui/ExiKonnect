@@ -1,212 +1,194 @@
 import React,{Component} from 'react';
 import './Signup.css';
 import {Modal,Button,ButtonToolbar} from 'react-bootstrap';
-import TextField from '@material-ui/core/TextField';
-import axios from 'react';
+import axios from 'axios';
 import ReactPhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/dist/style.css';
 import PasswordStrengthMeter from './PasswordStrengthMeter';
-
+import SuccessAlert from './SuccessAlert';
+import SuccessfulScreen from './Successful_popup';
+import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
 class Signup extends Component{
-  
+
     state = {
-      phone:'',
-       open:true,
-       fields: {},
-       errors: {},
-       password:''
-       }
- 
-    handleValidation(){
-      let fields = this.state.fields;
-      let errors = {};
-      let formIsValid = true;
+        Name:'',
+        Password:'',
+        Email:'',
+        Phone:'',
+        CompanyName:'',
+        PhoneCode:'',
+        Designation:'',
+        passwordIsMasked: true,
+        open:true,
+        alertMessage:'',
+        IsPasswordshow:false,
+        showPasswordStrength:true
+       };
 
-      //Name
-      if(!fields["Name"]){
-         formIsValid = false;
-         errors["Name"] = "Pls Enter Name";
+      togglestrengthPassword=(e)=>{
+        this.setState({[e.target.name]:e.target.value})
+        const showPass=this.state.showPasswordStrength;
+        this.setState({
+          showPass: !showPass
+        })
       }
-      //Email
-      if(!fields["Email"]){
-        formIsValid = false;
-        errors["Email"] = "Pls Enter Email Id";
-     }
 
-     if(typeof fields["Email"] !== "undefined"){
-        let lastAtPos = fields["Email"].lastIndexOf('@');
-        let lastDotPos = fields["Email"].lastIndexOf('.');
+        togglePasswordVisibility = () => {
+         const {IsPasswordshow}= this.state;
+         this.setState({IsPasswordshow:!IsPasswordshow});
+      };
 
-        if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["Email"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["Email"].length - lastDotPos) > 2)) {
-           formIsValid = false;
-           errors["Email"] = "Email is not valid";
-         }
-    } 
-
-       //Phone
-        if(!fields["Phone"]){
-          formIsValid = false;
-          errors["Phone"] = "Pls Enter only numbers";
-       }
-      if(typeof fields["Phone"] !== "undefined"){
-         if(!fields["Phone"].match(/^[0-9\b]+$/)){
-            formIsValid = false;
-            errors["Phone"] = "Pls Enter Only Numbers";
-         }        
-      }
-        //CompanyName
-        if(!fields["CompanyName"]){
-          formIsValid = false;
-          errors["CompanyName"] = "Pls Enter CompanyName";
-       }
-     
-       //Designation
-       if(!fields["Designation"]){
-        formIsValid = false;
-        errors["Designation"] = "Pls Enter Designation";
-     }
-      //Password
-      if(!fields["Password"]){
-        formIsValid = false;
-        errors["Password"] = "Pls Enter Password";
-      }
-    
-     this.setState({errors: errors});
-     return formIsValid;
- }
- 
-    handleChangeAll(field, event){
-      let fields = this.state.fields;
-      fields[field] =event.target.value; 
-      this.setState({fields});
-       if(this.handleValidation()){
-        this.setState({errors: null});
-       }
+    onOpenModal=()=>{
+        this.setState({open:true})
     }
+      onCloseModal=()=>{
+        this.setState({open:false})
+     }
+     handleOnChange=(value)=> {
+      this.setState({ PhoneCode: value })
+    }
+  
+    handleChange=(e)=> {
+      this.setState({[e.target.name]:e.target.value})
+    }
+ 
     handleSubmit=(event)=>{
      
       event.preventDefault();
-      if(this.handleValidation()){
-        axios.post('http://jsonplaceholder.typicode.com/Posts',this.state.fields ).then(response=>{
-        console.log(response)
-        })
+      console.log(this.state)
+        axios.post('/Signup',this.state).then(response=>{
+       const profile=response.data;
+       console.log(profile);
+       return <SuccessfulScreen/>
+      })
         .catch(error=>{
-           console.log(error)
+        
+           error.alertMessage='cant be submitted'
+       
         })
       }
-    }
-      onOpenModal=()=>{
-        this.setState({open:true});
-      }
-      onCloseModal=()=>{
-        this.setState({open:false});
-     }
-     handleOnChange=(value)=> {
-      this.setState({ phone: value });
-    }
-     render(){
-     const {open} = this.state;
-     const { password } = this.state;
+
+      
+      render(){
+      
+     const {open, IsPasswordshow} = this.state;
+     const {Name,Email, PhoneCode,Phone, Designation, CompanyName, Password }= this.state;
      return(
       <>
-     <Modal id="signup_modal" class="_model_radius"  centered size="lg" show={open} onHide={this.onCloseModal}>
+   
+     <Modal style={{position:"absolute"}} id="signup_modal" class="_model_radius"  centered size="lg" show={open} onHide={this.onCloseModal}>
+     <div style={{marginRight:"20px", marginLeft:"20px"}}>{this.state.alert_message==="success"?<SuccessAlert/>:null}</div>
         <Modal.Header closeButton>
+    
           <Modal.Title>Signup</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div id="signup_frm" class="row">
-        <form id="signup_form" onSubmit={this.handleSubmit}>
+        <ValidatorForm id="signup_form" onSubmit={this.handleSubmit.bind(this)}>
           <div class="container">
             <div class="row">
              <div class="col-md-6">
-             <span style={{color: "red"}}>{this.state.errors["Name"]}</span>
-             <TextField
+          
+             <TextValidator
                 id="standard-Name-input"
                 label="Name"
                 type="text"
                 name="Name"
-                value={this.state.fields["Name"]}
+                value={Name}
                 autoComplete="current-Name"
                 margin="normal"
-                onChange={this.handleChangeAll.bind(this,"Name")}
+                onChange={this.handleChange}
+                validators={['required']}
+                errorMessages={['this field is required']}
               />
              
               </div>
               <div class="col-md-6 ">
-              <span style={{color: "red"}}>{this.state.errors["Email"]}</span>
-              <TextField
+           
+              <TextValidator
                 id="standard-Email-input"
                 label="Email"
                 type="Email"
                 name="Email"
-                value={this.state.fields["Email"]}
+                value={Email}
                 autoComplete="current-Email"
                 margin="normal"
-                onChange={this.handleChangeAll.bind(this,"Email")}
+                onChange={this.handleChange}
+                validators={['required', 'isEmail']}
+                errorMessages={['this field is required', 'email is not valid']}
               />
               </div>
               </div>
            
             <div class="row">
             <div class="col-md-6">
-            <span style={{color: "red"}}>{this.state.errors["Phone"]}</span>
+     
             <div  style={{display:"flex", justifyContent:"center"}}>
-              <ReactPhoneInput defaultCountry={'in'} value={this.state.phone} onChange={this.handleOnChange}/>
-               <TextField 
+              <ReactPhoneInput defaultCountry={'in'} value={PhoneCode} onChange={this.handleOnChange}/>
+               <TextValidator 
                 id="standard-Phone-input"
                 label="Mobile Number"
                 type="number"
                 name="Phone"
-                value={this.state.fields["Phone"]}
+                value={Phone}
                 autoComplete="current-Phone"
                 margin="normal"
-                onChange={this.handleChangeAll.bind(this,"Phone")}
+                onChange={this.handleChange}
+                validators={['required', 'matchRegexp:^[0-9]$']}
+                errorMessages={['this field is required', 'Pls enter only digits']}
               />
               </div>
              </div>
              <div class="col-md-6">
-              <span style={{color: "red"}}>{this.state.errors["CompanyName"]}</span>
-              <TextField
+        
+              <TextValidator
                 id="standard-CompanyName-input"
                 label="Company Name"
                 type="text"
                 name="CompanyName"
-                value={this.state.fields["CompanyName"]}
+                value={CompanyName}
                 autoComplete="current-CompanyName"
                 margin="normal"
-                onChange={this.handleChangeAll.bind(this,"CompanyName")}
+                onChange={this.handleChange}
+                validators={['required']}
+                errorMessages={['this field is required']}
               />
             </div>
             </div>
             <div class="row">
               <div class="col-md-6 ">
-              <span style={{color: "red"}}>{this.state.errors["Designation"]}</span>
-              <TextField
+            
+              <TextValidator
                 id="standard-Designation-input"
                 label="Designation"
                 type="text"
                 name="Designation"
-                value={this.state.fields["Designation"]}
+                value={Designation}
                 autoComplete="current-Designation"
                 margin="normal"
-                onChange={this.handleChangeAll.bind(this,"Designation")}
+                onChange={this.handleChange}
+                validators={['required']}
+                errorMessages={['this field is required']}
               />
               </div>
               <div class="col-md-6 ml-auto">
-              <span style={{color: "red"}}>{this.state.errors["Password"]}</span>
-              <TextField
+          
+              <TextValidator
                 id="standard-Password-input" 
                 label="Password"
-                type="password"
-                name="password"
-                
-                value={this.state.fields["Password"]}
+                type={this.state.IsPasswordshow ? 'text' : 'password'}
+                name="Password"
+                value={Password}
                 autoComplete="current-password"
                 margin="normal"
-                onChange={e => this.setState({ password: e.target.value })}
-                />
-                <PasswordStrengthMeter password={password} />
+                onFocus={this.state.showPasswordStrength ? <PasswordStrengthMeter password={this.state.Password}/>  : null}
+                onChange={this.togglestrengthPassword.bind(this)}
+                validators={['required']}
+                errorMessages={['this field is required']}
+               />
+               <i className={`fa ${IsPasswordshow ? "fa-eye-slash" : "fa-eye"} password-icon`} onClick={this.togglePasswordVisibility.bind(this)}/>
+            
               </div>
               </div>
                     
@@ -221,7 +203,7 @@ class Signup extends Component{
             </div>
                 </div>
              </div>
-             </form>
+             </ValidatorForm>
         </div>
         </Modal.Body>
        

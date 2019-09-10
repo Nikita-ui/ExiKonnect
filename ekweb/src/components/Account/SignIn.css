@@ -44,14 +44,19 @@
       width:500px !important;
       position:absolute;
     }
-   .MuiSvgIcon-root{
+    #icon1.MuiSvgIcon-root, #icon2.MuiSvgIcon-root{
       position:relative;
-      top:45px;
-      left:-5px;
+      top:10px;
+      left:30px;
     }
     .MuiInputBase-input{
         padding-left:40px !important;
     }
+
+    .internal-autofill-selected {
+      background-color: none !important;
+    }
+  
     .MuiInputLabel-formControl{
        left:40px !important;
     }
@@ -81,5 +86,14 @@
          text-align: center;
          padding-top:15px;
     }
-     
   
+  input:-webkit-autofill:focus {
+   -webkit-box-shadow: 0 0 0 50px white inset;
+  }
+  #login_eye_icon.fa{
+     position: relative;
+   top: -20px !important;
+   left: 530px !important;
+   color: grey !important;
+
+  }

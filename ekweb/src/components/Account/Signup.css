@@ -1,4 +1,9 @@
-
+.fa {
+    position: relative;
+    top: -60px;
+    left: 330px;
+    color:grey !important;
+}
 ._centered
 {
     margin:0 auto;
@@ -128,6 +133,8 @@
  .react-tel-input .selected-flag .arrow.up {
     border-bottom: 0px solid #555 !important;
  }
+
+
 
  
 
